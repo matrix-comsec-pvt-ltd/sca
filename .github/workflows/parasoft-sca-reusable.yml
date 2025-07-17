@@ -27,10 +27,10 @@ jobs:
         with:
           runner_version: ${{ inputs.runner_version }}
           workflow_ci_token: ${{ secrets.WORKFLOW_CI_TOKEN }}
-          artifactory_url: ${{ var.ARTIFACTORY_URL }}
+          artifactory_url: ${{ vars.ARTIFACTORY_URL }}
           artifactory_username: ${{ secrets.ARTIFACTORY_USERNAME }}
           artifactory_password: ${{ secrets.ARTIFACTORY_PASSWORD }}
-          runner_setup_path: ${{ var.ARTIFACTORY_LINUX_RUNNER_SETUP }}
+          runner_setup_path: ${{ vars.ARTIFACTORY_LINUX_RUNNER_SETUP }}
   
   run_on_dynamic:
     needs: setup_runner
