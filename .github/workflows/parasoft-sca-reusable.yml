@@ -1,0 +1,116 @@
+name: Reusable Parasoft SCA Workflow
+
+on:
+  workflow_call:
+    inputs:
+      runner_version:
+        description: "Runner version to install"
+        required: true
+        type: string
+      git_ref_name:
+        required: true
+        type: string
+      ruleset:
+        required: true
+        type: string
+
+jobs:
+  setup_runner:
+    runs-on: [self-hosted, matrix-comsec-pvt-ltd]
+    outputs:
+      label: ${{ steps.start_runner.outputs.label }}
+      runs_on: ${{ steps.start_runner.outputs.runs_on }}
+    steps:
+      - name: Setup Dynamic Host Runner
+        id: start_runner
+        uses: your-org/your-repo/.github/actions/setup-host-runner@main
+        with:
+          runner_version: ${{ inputs.runner_version }}
+          #workflow_ci_token: ${{ secrets.WORKFLOW_CI_TOKEN }}
+
+  run_on_dynamic:
+    needs: setup_runner
+    runs-on: ${{ fromJSON(needs.setup_runner.outputs.runs_on) }}
+    steps:
+      - name: Print current user
+        run: whoami
+
+  teardown_runner:
+    if: always()
+    needs: [setup_runner, run_on_dynamic]
+    runs-on: [self-hosted, linux]
+    steps:
+      - name: Stop and remove runner
+        uses: matrix-comsec-pvt-ltd/sca/.github/actions/remove-linux-parasoft-sca-runner@main
+        with:
+          label: ${{ needs.setup_runner.outputs.label }}
+          runner_dir: ${{ needs.setup_runner.outputs.runner_dir }}
+
+  #static-analysis:
+    #name: Run Static Analysis for ${{ inputs.product }}
+    #runs-on: self-hosted
+
+    #env:
+      #WORKSPACE: ${{ github.workspace }}
+      #REPORT_ROOT: ${{ github.workspace }}/reports
+      #RULESET_NAME: ${{ inputs.ruleset }}
+      #GCC_VERSION: version
+      #LOCAL_PROPERTIES_FILE: local.properties
+      #BUILD_ID_PREFIX: SCA_BUILD
+      #GIT_REF_NAME: ${{ inputs.git_ref_name }}
+
+    #steps:
+    #- name: Checkout source code
+      #uses: actions/checkout@v4
+      #with:
+        #ref: ${{ env.GIT_REF_NAME }}
+
+    #- name: Configure build parameters
+      #run: |
+        #runNumber=$(date +%s)
+        #timestamp=$(date '+%Y%m%d-%H%M%S')
+        #buildID="${BUILD_ID_PREFIX}_${runNumber}_${timestamp}_${RULESET_NAME}_${GCC_VERSION}"
+
+        ## These are repo-specific paths – adjust as per product
+        #MAKE_DIR="make/"
+        #MAKE_TARGET="clean all"
+        #TRACE_CMD="gcc|g++"
+        #EXCLUDE_FILE="exclude.lst"
+        #INCLUDE_FILE="include.lst"
+
+        #echo "MAKE_DIR=$MAKE_DIR" >> $GITHUB_ENV
+        #echo "MAKE_TARGET=$MAKE_TARGET" >> $GITHUB_ENV
+        #echo "TRACE_CMD=$TRACE_CMD" >> $GITHUB_ENV
+        #echo "EXCLUDE_FILE=$EXCLUDE_FILE" >> $GITHUB_ENV
+        #echo "INCLUDE_FILE=$INCLUDE_FILE" >> $GITHUB_ENV
+        #echo "BUILD_ID=$buildID" >> $GITHUB_ENV
+        #echo "RUN_NUMBER=$runNumber" >> $GITHUB_ENV
+
+    #- name: Update local properties file
+      #run: |
+        #echo "build.id=$BUILD_ID" >> "$LOCAL_PROPERTIES_FILE"
+        #echo "run.number=$RUN_NUMBER" >> "$LOCAL_PROPERTIES_FILE"
+        #echo "ruleset=$RULESET_NAME" >> "$LOCAL_PROPERTIES_FILE"
+        #echo "compiler.version=$GCC_VERSION" >> "$LOCAL_PROPERTIES_FILE"
+
+    #- name: Generate BDF using cpptesttrace
+      #run: |
+        #cd "$MAKE_DIR"
+        #cpptesttrace --cpptesttraceOutputFile=$workspace/$cpptesttraceOutputFile --cpptesttraceTraceCommand=$TRACE_CMD --cpptesttraceProjectName=$cpptesttraceProjectName make $makeTarget #cpptesttraceProjectName (#TBD)
+
+    #- name: Run static analysis with cpptestcli
+      #run: |
+        #cpptestcli -data "$WORKSPACE" \
+          #-config "builtin://${RULESET_NAME}" \
+          #-localsettings "$LOCAL_PROPERTIES_FILE" \
+          #-property report.format=html,xml,sarif \
+          #-property report.location="$REPORT_ROOT" \
+          #$([[ -n "$EXCLUDE_FILE" ]] && echo "-property exclude.file=$EXCLUDE_FILE") \
+          #$([[ -n "$INCLUDE_FILE" ]] && echo "-property include.file=$INCLUDE_FILE")
+
+    #- name: Archive generated reports
+      #run: |
+        #FINAL_REPORT_DIR="$REPORT_ROOT/$BUILD_ID"
+        #mkdir -p "$FINAL_REPORT_DIR"
+        #cp "$REPORT_ROOT"/report.* "$FINAL_REPORT_DIR/" || true
+
