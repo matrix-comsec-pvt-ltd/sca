@@ -1,0 +1,41 @@
+name: Remove Dynamic Self-hosted Linux Runner
+description: Composite action to stop and de-register GitHub Actions runner (non-Docker)
+
+inputs:
+  label:
+    required: true
+    description: "Unique label for the dynamic runner"
+  runner_dir:
+    required: true
+    description: "Directory path where the runner was configured"
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: Deregister runner
+      shell: bash
+      run: |
+        echo "Removing runner in: ${{ inputs.runner_dir }}"
+
+        if [[ -d "${{ inputs.runner_dir }}" ]]; then
+          cd "${{ inputs.runner_dir }}"
+
+          if [[ -f ./config.sh ]]; then
+            echo "Running ./config.sh remove"
+            ./config.sh remove --unattended --token YOUR_REMOVE_TOKEN_PLACEHOLDER
+          else
+            echo "No config.sh found; skipping deregistration"
+          fi
+
+          echo "Killing any runner process..."
+          pkill -f "runsvc.sh" || true
+        else
+          echo "Runner directory does not exist: ${{ inputs.runner_dir }}"
+        fi
+
+    - name: Clean up runner directory
+      shell: bash
+      run: |
+        echo "Deleting runner directory: ${{ inputs.runner_dir }}"
+        rm -rf "${{ inputs.runner_dir }}"
