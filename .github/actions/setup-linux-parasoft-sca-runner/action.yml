@@ -49,7 +49,7 @@ runs:
         echo "label=${LABEL}" >> $GITHUB_OUTPUT
         echo "runs_on=${RUNS_ON}" >> $GITHUB_OUTPUT
 
-     - name: Download GitHub Actions runner package
+    - name: Download GitHub Actions runner package
       shell: bash
       run: |
         mkdir -p actions-runner-${{ steps.generate_label.outputs.label }}
