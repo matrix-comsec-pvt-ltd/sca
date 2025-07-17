@@ -31,8 +31,8 @@ jobs:
 
   run_static_analysis:
     name: Run Parasoft Static Analysis
-    needs: validate_inputs
-    uses: ./.github/workflows/parasoft-reusable-sca.yml
+    #needs: validate_inputs
+    uses: ./.github/workflows/parasoft-sca-reusable.yml
     with:
       git_ref_name: ${{ needs.validate_inputs.outputs.validated_branch }}
       ruleset: rule_name
