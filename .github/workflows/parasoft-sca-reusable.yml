@@ -26,8 +26,12 @@ jobs:
         uses: matrix-comsec-pvt-ltd/sca/.github/actions/setup-linux-parasoft-sca-runner@main
         with:
           runner_version: ${{ inputs.runner_version }}
-          #workflow_ci_token: ${{ secrets.WORKFLOW_CI_TOKEN }}
-
+          workflow_ci_token: ${{ secrets.WORKFLOW_CI_TOKEN }}
+          artifactory_url: ${{ var.ARTIFACTORY_URL }}
+          artifactory_username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          artifactory_password: ${{ secrets.ARTIFACTORY_PASSWORD }}
+          runner_setup_path: ${{ var.ARTIFACTORY_LINUX_RUNNER_SETUP }}
+  
   run_on_dynamic:
     needs: setup_runner
     runs-on: ${{ fromJSON(needs.setup_runner.outputs.runs_on) }}
@@ -38,7 +42,7 @@ jobs:
   teardown_runner:
     #if: always()
     needs: [setup_runner, run_on_dynamic]
-    runs-on: [self-hosted, linux]
+    runs-on: [self-hosted, matrix-comsec-pvt-ltd]
     steps:
       - name: Stop and remove runner
         uses: matrix-comsec-pvt-ltd/sca/.github/actions/remove-linux-parasoft-sca-runner@main
