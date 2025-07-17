@@ -1,0 +1,39 @@
+name: Parasoft SCA - Manual Trigger for Feature Branches
+
+on:
+  workflow_dispatch:
+    inputs:
+      feature_branch:
+        description: "Enter the name of the feature branch (must start with 'feature-')"
+        required: true
+        type: string
+
+jobs:
+  validate_inputs:
+    name: Validate Feature Branch
+    runs-on: ubuntu-latest
+
+    outputs:
+      validated_branch: ${{ steps.validate.outputs.branch }}
+
+    steps:
+    - name: Validate feature branch input
+      id: validate
+      run: |
+        BRANCH="${{ github.event.inputs.feature_branch }}"
+
+        if [[ ! "$BRANCH" =~ ^feature- ]]; then
+          echo "::error::Branch name '$BRANCH' is invalid. It must start with 'feature-'."
+          exit 1
+        fi
+
+        echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
+  run_static_analysis:
+    name: Run Parasoft Static Analysis
+    needs: validate_inputs
+    uses: ./.github/workflows/parasoft-reusable-sca.yml
+    with:
+      git_ref_name: ${{ needs.validate_inputs.outputs.validated_branch }}
+      ruleset: rule_name
+    secrets: inherit
