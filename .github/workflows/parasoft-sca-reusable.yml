@@ -36,7 +36,7 @@ jobs:
         run: whoami
 
   teardown_runner:
-    if: always()
+    #if: always()
     needs: [setup_runner, run_on_dynamic]
     runs-on: [self-hosted, linux]
     steps:
