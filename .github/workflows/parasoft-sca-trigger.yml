@@ -36,4 +36,5 @@ jobs:
     with:
       git_ref_name: ${{ needs.validate_inputs.outputs.validated_branch }}
       ruleset: rule_name
+      runner_version: "1.0.0" 
     secrets: inherit
