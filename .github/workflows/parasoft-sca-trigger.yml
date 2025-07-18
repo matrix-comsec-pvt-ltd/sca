@@ -1,5 +1,4 @@
-name: Parasoft SCA - Manual Trigger for Feature Branches
-
+name: Parasoft SCA Trigger 
 on:
   workflow_dispatch:
     #inputs:
