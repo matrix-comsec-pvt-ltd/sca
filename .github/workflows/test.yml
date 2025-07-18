@@ -3,15 +3,44 @@ name: Debug Runner Identity
 on:
   workflow_dispatch:
 
+# jobs:
+#   print_var:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Print ORGANIZATION_RUNNER_LABEL
+#         run: echo "ORGANIZATION_RUNNER_LABEL = ${{ vars.ORGANIZATION_RUNNER_LABEL }}"
+#   print_user:
+#     # runs-on: ${{ fromJSON(vars.ORGANIZATION_RUNNER_LABEL) }}
+#     runs-on: [self-hosted, reporunner] 
+#     steps:
+#       - name: Print runner user
+#         run: whoami
+
 jobs:
-  print_var:
-    runs-on: ubuntu-latest
+  setup_runner:
+    runs-on: [self-hosted, reporunner]
+    outputs:
+      label: ${{ steps.start_runner.outputs.label }}
+      runs_on: ${{ steps.start_runner.outputs.runs_on }}
     steps:
-      - name: Print ORGANIZATION_RUNNER_LABEL
-        run: echo "ORGANIZATION_RUNNER_LABEL = ${{ vars.ORGANIZATION_RUNNER_LABEL }}"
+      - name: Setup Dynamic Host Runner
+        id: start_runner
+        uses: matrix-comsec-pvt-ltd/sca/.github/actions/setup-linux-parasoft-sca-runner@main
+        with:
+          runner_version: ${{ inputs.runner_version }}
+          artifactory_url: ${{ secrets.ARTIFACTORY_URL }}
+          artifactory_username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          artifactory_password: ${{ secrets.ARTIFACTORY_PASSWORD }}
+          runner_setup_path: ${{ vars.RUNNER_SETUP_PATH }}
+          workflow_ci_token: ${{ secrets.WORKFLOW_CI_TOKEN }}
+
   print_user:
-    # runs-on: ${{ fromJSON(vars.ORGANIZATION_RUNNER_LABEL) }}
-    runs-on: [self-hosted, reporunner] 
+    needs: setup_runner
+    runs-on: ${{ fromJson(needs.setup_runner.outputs.runs_on) }}
     steps:
       - name: Print runner user
         run: whoami
+
+      - name: Debug runner label
+        run: echo "Dynamic runner label is ${{ needs.setup_runner.outputs.label }}"
+
