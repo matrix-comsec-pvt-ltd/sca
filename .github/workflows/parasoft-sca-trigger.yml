@@ -46,13 +46,13 @@ jobs:
 
         #echo "branch=$BRANCH" >> $GITHUB_OUTPUT
         
-  run_static_analysis:
-      name: Run Parasoft Static Analysis
-      #needs: validate_inputs
-      uses: ./.github/workflows/parasoft-sca-reusable.yml
-      with:
-        #git_ref_name: ${{ needs.validate_inputs.outputs.validated_branch }}
-        git_ref_name: ${{ needs.debug_inputs.outputs.branch }}    #only for debug process
-        ruleset: rule_name
-        runner_version: "1.0.0" 
-      secrets: inherit
+  # run_static_analysis:
+  #     name: Run Parasoft Static Analysis
+  #     #needs: validate_inputs
+  #     uses: ./.github/workflows/parasoft-sca-reusable.yml
+  #     with:
+  #       #git_ref_name: ${{ needs.validate_inputs.outputs.validated_branch }}
+  #       git_ref_name: ${{ needs.debug_inputs.outputs.branch }}    #only for debug process
+  #       ruleset: rule_name
+  #       runner_version: "1.0.0" 
+  #     secrets: inherit
