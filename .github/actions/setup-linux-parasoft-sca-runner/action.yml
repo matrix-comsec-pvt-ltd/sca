@@ -42,6 +42,7 @@ runs:
       id: generate_label
       shell: bash
       run: |
+        echo "🔧 Generating unique runner label..."
         RANDOM_SUFFIX=$(printf "%05d%05d" $RANDOM $RANDOM)
         LABEL="host-${GITHUB_REPOSITORY##*/}-${GITHUB_RUN_NUMBER}-${RANDOM_SUFFIX}"
         RUNS_ON="[\"self-hosted\", \"${LABEL}\"]"
@@ -52,18 +53,21 @@ runs:
     - name: Download GitHub Actions runner package
       shell: bash
       run: |
+        echo " Creating directory for runner: actions-runner-${{ steps.generate_label.outputs.label }}"
         mkdir -p actions-runner-${{ steps.generate_label.outputs.label }}
         cd actions-runner-${{ steps.generate_label.outputs.label }}
-
+        
+        echo "📦 Downloading runner from Artifactory..."
         curl -u "${{ inputs.artifactory_username }}:${{ inputs.artifactory_password }}" \
              -O "${{ inputs.artifactory_url }}/${{ inputs.runner_setup_path }}"
-
+        echo "📂 Extracting tarfile..."
         tar -xzf ./actions-runner-linux-x64-*.tar.gz
 
 
     - name: Configure the runner
       shell: bash
       run: |
+        echo "⚙️ Configuring the GitHub runner..."
         cd actions-runner-${{ steps.generate_label.outputs.label }}
 
         ./config.sh --unattended \
@@ -72,6 +76,7 @@ runs:
           --name "${{ steps.generate_label.outputs.label }}" \
           --labels "${{ steps.generate_label.outputs.label }}" \
           --work _work
+       echo "✅ Runner configured successfully."
 
     - name: Start the runner in background
       shell: bash
