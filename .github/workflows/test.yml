@@ -1,0 +1,11 @@
+name: Debug Runner Identity
+
+on:
+  workflow_dispatch:
+
+jobs:
+  print_user:
+    runs-on: ${{ fromJSON(vars.ORGANIZATION_RUNNER_LABEL) }}
+    steps:
+      - name: Print runner user
+        run: whoami
