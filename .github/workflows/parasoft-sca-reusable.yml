@@ -21,6 +21,13 @@ jobs:
       label: ${{ steps.start_runner.outputs.label }}
       runs_on: ${{ steps.start_runner.outputs.runs_on }}
     steps:
+      - name: Log inputs
+        run: |
+          echo "🚀 Setting up runner with:"
+          echo "  ➤ Runner version: ${{ inputs.runner_version }}"
+          echo "  ➤ Artifactory URL: ${{ vars.ARTIFACTORY_URL }}"
+          echo "  ➤ Runner setup path: ${{ vars.ARTIFACTORY_LINUX_RUNNER_SETUP }}"
+
       - name: Setup Dynamic Host Runner
         id: start_runner
         uses: matrix-comsec-pvt-ltd/sca/.github/actions/setup-linux-parasoft-sca-runner@main
@@ -31,19 +38,32 @@ jobs:
           artifactory_username: ${{ secrets.ARTIFACTORY_USERNAME }}
           artifactory_password: ${{ secrets.ARTIFACTORY_PASSWORD }}
           runner_setup_path: ${{ vars.ARTIFACTORY_LINUX_RUNNER_SETUP }}
+          
+      - name: Log outputs from setup
+        run: |
+          echo "✅ Setup complete"
+          echo "  ➤ Label: ${{ steps.start_runner.outputs.label }}"
+          echo "  ➤ Runs-on: ${{ steps.start_runner.outputs.runs_on }}"
+          echo "  ➤ Runner Dir: ${{ steps.start_runner.outputs.runner_dir }}"
   
-  run_on_dynamic:
+  build_project:
     needs: setup_runner
     runs-on: ${{ fromJSON(needs.setup_runner.outputs.runs_on) }}
     steps:
       - name: Print current user
         run: whoami
 
-  teardown_runner:
+  remove_runner:
     #if: always()
-    needs: [setup_runner, run_on_dynamic]
+    needs: [setup_runner, build_project]
     runs-on: [self-hosted, matrix-comsec-pvt-ltd]
     steps:
+      - name: Log teardown inputs
+        run: |
+          echo "🧹 Cleaning up runner"
+          echo "  ➤ Label: ${{ needs.setup_runner.outputs.label }}"
+          echo "  ➤ Runner Dir: ${{ needs.setup_runner.outputs.runner_dir }}"
+          
       - name: Stop and remove runner
         uses: matrix-comsec-pvt-ltd/sca/.github/actions/remove-linux-parasoft-sca-runner@main
         with:
