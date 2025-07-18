@@ -9,6 +9,17 @@ on:
         #type: string
 
 jobs:
+  debug_inputs:
+    runs-on: ${{ fromJSON(vars.ORGANIZATION_RUNNER_LABEL) }}
+    outputs:
+      branch: ${{ steps.set.outputs.branch }}
+    steps:
+      - name: Print Debug Inputs
+        run: |
+          echo "🔧 Git Ref Name (validated_branch): ${{ steps.set.outputs.branch }}"
+          echo "🔧 Ruleset: rule_name"
+          echo "🔧 Runner Version: 1.0.0"
+          
   #validate_inputs:
     #name: Validate Feature Branch
     #runs-on: ubuntu-latest
@@ -28,13 +39,13 @@ jobs:
         #fi
 
         #echo "branch=$BRANCH" >> $GITHUB_OUTPUT
-
+        
   run_static_analysis:
-    name: Run Parasoft Static Analysis
-    #needs: validate_inputs
-    uses: ./.github/workflows/parasoft-sca-reusable.yml
-    with:
-      git_ref_name: ${{ needs.validate_inputs.outputs.validated_branch }}
-      ruleset: rule_name
-      runner_version: "1.0.0" 
-    secrets: inherit
+      name: Run Parasoft Static Analysis
+      #needs: validate_inputs
+      uses: ./.github/workflows/parasoft-sca-reusable.yml
+      with:
+        git_ref_name: ${{ needs.validate_inputs.outputs.validated_branch }}
+        ruleset: rule_name
+        runner_version: "1.0.0" 
+      secrets: inherit
