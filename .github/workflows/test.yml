@@ -4,9 +4,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  print_user:
-    # runs-on: ${{ fromJSON(vars.ORGANIZATION_RUNNER_LABEL) }}
-    runs-on: [self-hosted, matrix-comsec-pvt-ltd] 
+  print_var:
+    runs-on: ubuntu-latest
     steps:
-      - name: Print runner user
-        run: whoami
+      - name: Print ORGANIZATION_RUNNER_LABEL
+        run: echo "ORGANIZATION_RUNNER_LABEL = ${{ vars.ORGANIZATION_RUNNER_LABEL }}"
+  # print_user:
+  #   # runs-on: ${{ fromJSON(vars.ORGANIZATION_RUNNER_LABEL) }}
+  #   runs-on: [self-hosted, matrix-comsec-pvt-ltd] 
+  #   steps:
+  #     - name: Print runner user
+  #       run: whoami
