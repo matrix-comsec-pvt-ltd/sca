@@ -10,8 +10,8 @@ jobs:
       - name: Print ORGANIZATION_RUNNER_LABEL
         run: echo "ORGANIZATION_RUNNER_LABEL = ${{ vars.ORGANIZATION_RUNNER_LABEL }}"
   print_user:
-    runs-on: ${{ fromJSON(vars.ORGANIZATION_RUNNER_LABEL) }}
-    # runs-on: [self-hosted, matrix-comsec-pvt-ltd]
+    # runs-on: ${{ fromJSON(vars.ORGANIZATION_RUNNER_LABEL) }}
+    runs-on: [self-hosted]
     steps:
       - name: Print runner user
         run: whoami
