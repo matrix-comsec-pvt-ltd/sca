@@ -16,7 +16,7 @@ on:
 
 jobs:
   setup_runner:
-    runs-on: [self-hosted, matrix-comsec-pvt-ltd]
+    runs-on: [self-hosted, orgmatcom]
     outputs:
       label: ${{ steps.start_runner.outputs.label }}
       runs_on: ${{ steps.start_runner.outputs.runs_on }}
