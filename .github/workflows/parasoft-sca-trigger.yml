@@ -9,7 +9,8 @@ on:
 
 jobs:
   debug_inputs:
-    runs-on: ${{ fromJSON(vars.ORGANIZATION_RUNNER_LABEL) }}
+    # runs-on: ${{ fromJSON(vars.ORGANIZATION_RUNNER_LABEL) }}
+    runs-on: [self-hosted, orgmatcom]
     outputs:
       branch: ${{ steps.set.outputs.branch }}
     steps:
