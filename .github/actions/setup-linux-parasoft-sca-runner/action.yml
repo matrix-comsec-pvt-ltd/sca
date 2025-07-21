@@ -77,7 +77,7 @@ runs:
           --name "${{ steps.generate_label.outputs.label }}" \
           --labels "${{ steps.generate_label.outputs.label }}" \
           --work _work
-       echo "✅ Runner configured successfully."
+         echo "✅ Runner configured successfully."
 
     - name: Start the runner in background
       shell: bash
