@@ -45,7 +45,7 @@ runs:
         echo "🔧 Generating unique runner label..."
         RANDOM_SUFFIX=$(printf "%05d%05d" $RANDOM $RANDOM)
         # LABEL="host-${GITHUB_REPOSITORY##*/}-${GITHUB_RUN_NUMBER}-${RANDOM_SUFFIX}"
-        LABEL="orgmatcom"
+        LABEL="reporunner"
         # RUNS_ON="[\"self-hosted\", \"${LABEL}\"]"
 
         echo "label=${LABEL}" >> $GITHUB_OUTPUT
