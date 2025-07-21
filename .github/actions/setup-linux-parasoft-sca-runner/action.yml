@@ -46,7 +46,8 @@ runs:
         RANDOM_SUFFIX=$(printf "%05d%05d" $RANDOM $RANDOM)
         # LABEL="host-${GITHUB_REPOSITORY##*/}-${GITHUB_RUN_NUMBER}-${RANDOM_SUFFIX}"
         LABEL="reporunner"
-        RUNS_ON="[\"self-hosted\", \"${LABEL}\"]"
+        # RUNS_ON="[\"self-hosted\", \"${LABEL}\"]"
+        RUNS_ON="[\"self-hosted\", \"orgmatcom\"]"
 
         echo "label=${LABEL}" >> $GITHUB_OUTPUT
         echo "runs_on=${RUNS_ON}" >> $GITHUB_OUTPUT
