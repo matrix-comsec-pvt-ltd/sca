@@ -60,8 +60,7 @@ runs:
         
         echo "📦 Downloading runner from Artifactory..."
         curl -k -u "${{ inputs.artifactory_username }}:${{ inputs.artifactory_password }}" \
-             -o github-runner.tar.gz \
-             "${{ inputs.artifactory_url }}/${{ inputs.runner_setup_path }}"
+             -o "${{ inputs.artifactory_url }}/${{ inputs.runner_setup_path }}"
                 
         echo "📂 Extracting tarfile..."
         tar -xzf ./actions-runner-linux-x64-*.tar.gz
