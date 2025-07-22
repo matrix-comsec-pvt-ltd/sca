@@ -33,8 +33,8 @@ jobs:
         id: start_runner
         uses: matrix-comsec-pvt-ltd/sca/.github/actions/setup-linux-parasoft-sca-runner@main
         with:
-          runner_version: ${{ inputs.runner_version }}
-          artifactory_url: ${{ secrets.ARTIFACTORY_URL }}
+          # runner_version: ${{ inputs.runner_version }}
+          artifactory_url: ${{ vars.ARTIFACTORY_URL }}
           artifactory_username: ${{ secrets.ARTIFACTORY_USERNAME }}
           artifactory_password: ${{ secrets.ARTIFACTORY_PASSWORD }}
           runner_setup_path: ${{ vars.RUNNER_SETUP_PATH }}
