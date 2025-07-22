@@ -58,7 +58,7 @@ runs:
         mkdir -p actions-runner-${{ steps.generate_label.outputs.label }}
         cd actions-runner-${{ steps.generate_label.outputs.label }}
         
-        echo "📦 Downloading runner from Artifactory... from  ${{ inputs.artifactory_url }}/${{ inputs.runner_setup_path }}"
+        echo "📦 Downloading runner from Artifactory... from  {{ inputs.runner_setup_path }}"
         echo "URL: ${{ inputs.artifactory_url }}/${{ inputs.runner_setup_path }}"
         curl -k -u "${{ inputs.artifactory_username }}:${{ inputs.artifactory_password }}" -o "${{ inputs.artifactory_url }}/${{ inputs.runner_setup_path }}"
                 
