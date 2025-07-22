@@ -59,8 +59,8 @@ runs:
         cd actions-runner-${{ steps.generate_label.outputs.label }}
         
         echo "📦 Downloading runner from Artifactory..."
-        curl -k -u "${{ inputs.artifactory_username }}:${{ inputs.artifactory_password }}" \
-             -o "${{ inputs.artifactory_url }}/${{ inputs.runner_setup_path }}"
+        echo "URL: ${{ inputs.artifactory_url }}/${{ inputs.runner_setup_path }}"
+        curl -k -u "${{ inputs.artifactory_username }}:${{ inputs.artifactory_password }}" -o "${{ inputs.artifactory_url }}/${{ inputs.runner_setup_path }}"
                 
         echo "📂 Extracting tarfile..."
         tar -xzf ./actions-runner-linux-x64-*.tar.gz
