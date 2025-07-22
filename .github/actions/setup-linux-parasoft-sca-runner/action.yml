@@ -62,11 +62,7 @@ runs:
         curl -k -u "${{ inputs.artifactory_username }}:${{ inputs.artifactory_password }}" \
              -o github-runner.tar.gz \
              "${{ inputs.artifactory_url }}/${{ inputs.runner_setup_path }}"
-            
-        echo "📦 Verifying downloaded file..."
-        ls -lh github-runner.tar.gz
-        file github-runner.tar.gz
-        
+                
         echo "📂 Extracting tarfile..."
         tar -xzf ./actions-runner-linux-x64-*.tar.gz
 
