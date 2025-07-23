@@ -60,8 +60,7 @@ runs:
         
         echo "📦 Downloading runner from Artifactory... from  ${{ inputs.runner_setup_path }}"
         echo "URL: ${{ inputs.artifactory_url }}/${{ inputs.runner_setup_path }}"
-        curl -k -L -u "pragya.dayal:pragya" "https://artifactory.matrixcomsec.org/artifactory/mx-linux-thirdparty-deps/opensource/prebuilt/github-actions-runner/2.323.0/actions-runner-linux-x64-2.323.0.tar.gz"
-        #-o "actions-runner-linux-x64-2.323.0.tar.gz" \
+        curl -k -L -O -u "pragya.dayal:pragya" "https://artifactory.matrixcomsec.org/artifactory/mx-linux-thirdparty-deps/opensource/prebuilt/github-actions-runner/2.323.0/actions-runner-linux-x64-2.323.0.tar.gz"
         
                 
         echo "📂 Extracting tarfile..."
