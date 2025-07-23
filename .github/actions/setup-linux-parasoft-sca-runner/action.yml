@@ -74,8 +74,8 @@ runs:
         cd actions-runner-${{ steps.generate_label.outputs.label }}
 
         ./config.sh --unattended \
-          --url "https://github.com/${GITHUB_REPOSITORY}" \
-          --token "${{ inputs.workflow_ci_token }}" \
+          --url "https://github.com/matrix-comsec-pvt-ltd/sca" \
+          --token "${{ secrets.workflow_ci_token }}" \
           --name "${{ steps.generate_label.outputs.label }}" \
           --labels "${{ steps.generate_label.outputs.label }}" \
           --work _work
