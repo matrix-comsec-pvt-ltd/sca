@@ -75,7 +75,7 @@ runs:
 
         ./config.sh --unattended \
           --url "https://github.com/matrix-comsec-pvt-ltd/sca" \
-          --token "${{ secrets.workflow_ci_token }}" \
+          --token "${{ inputs.workflow_ci_token }}" \
           --name "${{ steps.generate_label.outputs.label }}" \
           --labels "${{ steps.generate_label.outputs.label }}" \
           --work _work
