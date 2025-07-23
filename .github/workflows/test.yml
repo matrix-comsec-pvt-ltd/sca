@@ -38,7 +38,7 @@ jobs:
           artifactory_username: ${{ secrets.ARTIFACTORY_USERNAME }}
           artifactory_password: ${{ secrets.ARTIFACTORY_PASSWORD }}
           runner_setup_path: ${{ vars.RUNNER_SETUP_PATH }}
-          workflow_ci_token: ${{ secrets.WORKFLOW_CI_TOKEN }}
+          workflow_ci_token: ${{ secrets.WCT }}
 
   print_user:
     needs: setup_runner
