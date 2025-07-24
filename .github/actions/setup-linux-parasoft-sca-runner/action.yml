@@ -77,7 +77,6 @@ runs:
         -H "Authorization: token ${{ inputs.workflow_ci_token }}" \
         https://api.github.com/repos/matrix-comsec-pvt-ltd/sca/actions/runners/registration-token
 
-          echo "💡 Debug: REPO URL = https://github.com/matrix-comsec-pvt-ltd/sca"
         ./config.sh --unattended \
           --url "https://github.com/matrix-comsec-pvt-ltd/sca" \
           --token "${{ inputs.workflow_ci_token }}" \
